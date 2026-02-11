@@ -1,6 +1,6 @@
 import Transaction from "../models/transactions.js";
-
-export async function getTotalBalance(dateRange) {
+// Get dashboard data with optional date range filter
+export async function getDashboardData(dateRange) {
   const pipeline = [];
 
   if (dateRange) {
@@ -20,3 +20,4 @@ export async function getTotalBalance(dateRange) {
 
   return await Transaction.aggregate(pipeline);
 }
+

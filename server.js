@@ -9,7 +9,7 @@ async function startServer() {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server is running at http://localhost:${PORT} swagger docs available at http://localhost:${PORT}/api-docs`);
     });
   } catch (error) {
     console.error("Failed to start the server:", error);

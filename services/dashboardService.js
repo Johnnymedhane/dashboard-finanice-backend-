@@ -1,7 +1,7 @@
 
-import * as dashboardRepositories from "../repositories/dashboardRepository.js";
+import * as dashboardRepository from "../repositories/dashboardRepository.js";
 import { subDays } from "date-fns";
-
+// Get dashboard data with optional time filter (weekly, monthly, yearly)
 export async function getDashboardData(filter) {
   let startDate;
 
@@ -13,16 +13,23 @@ export async function getDashboardData(filter) {
     startDate = subDays(new Date(), 365);
   }
 
-  const data = await dashboardRepositories.getTotalBalance(
+  const total = await dashboardRepository.getDashboardData(
     startDate ? { start: startDate } : undefined
   );
 
-  const income = data.find(d => d._id === "income")?.total || 0;
-  const expense = data.find(d => d._id === "expense")?.total || 0;
+
+
+  const income = total.find(d => d._id === "income")?.total || 0;
+  const expense = total.find(d => d._id === "expense")?.total || 0;
+  
+
+
 
   return {
     income,
     expense,
-    balance: income - expense
+    balance: income - expense,
+   
+    
   };
 }

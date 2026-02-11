@@ -3,7 +3,7 @@
 import * as dashboardService from "../services/dashboardService.js";
 
 
-
+// Get dashboard data with optional time filter (weekly, monthly, yearly)
 export async function getDashboardDataController(req, res) {
   try {
     const filter = req.query.filter || "monthly";
