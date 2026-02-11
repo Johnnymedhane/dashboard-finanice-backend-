@@ -8,8 +8,12 @@ Express + MongoDB (Mongoose) backend for a finance dashboard. Includes Transacti
 
 ## API Docs (Swagger)
 
-- Swagger UI: `http://localhost:5000/api-docs`
-- OpenAPI JSON: `http://localhost:5000/api-docs.json`
+- 
+
+On a deployed server, Swagger will be available at:
+
+- `https://DOMAIN/api-docs`
+- `https://DOMAIN/api-docs.json`
 
 ## Endpoints
 

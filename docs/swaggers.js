@@ -5,7 +5,7 @@ export const openapiSpec = {
     version: '1.0.0',
     description: 'API documentation for the Dashboard Finance backend.'
   },
-  servers: [{ url: 'http://localhost:5000' }],
+  servers: [{ url: '/' }],
   tags: [
     { name: 'Dashboard' },
     { name: 'Transactions' },
