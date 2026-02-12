@@ -10,18 +10,23 @@ const transactionSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["income", "expense"],
-      required: true
+      required: true,
+      trim: true,
+      lowercase: true
     },
     amount: {
       type: Number,
-      required: true
+      required: true,
+      min: [0.01, "amount must be a positive number"]
     },
-    description: String,
-    category: String,
+    description: { type: String, trim: true },
+    category: { type: String, trim: true },
     status: {
       type: String,
       enum: ["completed", "pending"],
-      default: "completed"
+      default: "completed",
+      trim: true,
+      lowercase: true
     },
     date: {
       type: Date,

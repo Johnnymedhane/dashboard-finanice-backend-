@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const taskSchema = new mongoose.Schema(
   {
     // user: {
@@ -5,9 +7,15 @@ const taskSchema = new mongoose.Schema(
     //   ref: "User",
     //   required: true
     // },
-    title: { type: String, required: true },
+    title: {
+      type: String,
+      required: [true, "Title is required"],
+      trim: true,
+      minlength: [1, "Title cannot be empty"],
+      maxlength: [120, "Title is too long"],
+    },
     completed: { type: Boolean, default: false },
-    progress: { type: Number, default: 0 }
+    progress: { type: Number, min: 0, max: 100, default: 0 },
   },
   { timestamps: true }
 );
