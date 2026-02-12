@@ -1,20 +1,16 @@
 # Dashboard Finance Backend
 
-Express + MongoDB (Mongoose) backend for a finance dashboard. Includes Transactions, Tasks, and Dashboard aggregation endpoints, plus Swagger UI.
+Express + MongoDB (Mongoose) backend for a finance dashboard. Includes Transactions, Tasks, Dashboard aggregation endpoints, and Swagger UI.
+
+## Live (Render)
+
+- Base URL: https://dashboard-finanice-track.onrender.com
+- Swagger UI: https://dashboard-finanice-track.onrender.com/api-docs
+- OpenAPI JSON: https://dashboard-finanice-track.onrender.com/api-docs.json
 
 
 
-1
-
-## API Docs (Swagger)
-
-- 
-
-On a deployed server, Swagger will be available at:
-
-- `https://DOMAIN/api-docs`
-- `https://DOMAIN/api-docs.json`
-
+#
 ## Endpoints
 
 ### Dashboard
@@ -30,11 +26,8 @@ On a deployed server, Swagger will be available at:
 - `PUT /api/transactions/:id`
 - `DELETE /api/transactions/:id`
 
-**Validation (high level)**
-- `type`: `income` or `expense`
-- `amount`: number > 0
-- `status` (optional): `completed` or `pending`
-- `date` (optional): valid date
+
+
 
 ### Tasks
 
@@ -45,20 +38,5 @@ On a deployed server, Swagger will be available at:
 - `PUT /api/tasks/:id`
 - `DELETE /api/tasks/:id`
 
-**Validation (high level)**
-- `title`: required for create; non-empty string (whitespace-only rejected)
-- `progress` (optional): number 0..100
-- `completed` (optional): boolean
 
-## 404 Behavior
 
-- `GET /` returns the landing page from `public/index.html`.
-- Unknown routes return `public/pageNotFound.html` with a 404.
-
-## Seeding (optional)
-
-There is a seed script for tasks:
-
-- `node scripts/seedTasks.js`
-
-This connects using `MONGO_URI`, clears tasks, and inserts example tasks.
