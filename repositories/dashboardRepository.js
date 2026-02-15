@@ -1,23 +1,20 @@
 import Transaction from "../models/transactions.js";
 // Get dashboard data with optional date range filter
-export async function getDashboardData(dateRange) {
-  const pipeline = [];
-
-  if (dateRange) {
-    pipeline.push({
+export async function getDashboardData(dateRange, userId) {
+ 
+  return await Transaction.aggregate([
+    {
       $match: {
-        date: { $gte: dateRange.start },
+        date: { $gte: dateRange },
+        user: userId,
       },
-    });
-  }
-
-  pipeline.push({
-    $group: {
-      _id: "$type",
-      total: { $sum: "$amount" },
     },
-  });
-
-  return await Transaction.aggregate(pipeline);
+    {
+      $group: {
+        _id: "$type",
+        total: { $sum: "$amount" },
+      },
+    },
+  ]);
 }
 

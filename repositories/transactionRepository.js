@@ -4,41 +4,38 @@
 
 import Transaction from "../models/transactions.js";
 
-
-// Get all transactions
-export async function getAllTransactions() {
-  return await Transaction.find();
-};
-
-// Get recent transactions (last 7 days)
-export async function getRecentTransactions(recentDays) {
-  
-  return await Transaction.find({ date: { $gte: recentDays } });
+// Get all transactions for a user
+export async function getAllTransactions(userId) {
+  return await Transaction.find({ user: userId });
 }
 
-// Create a new transaction
+// Get recent transactions (last N days) for a user
+export async function getRecentTransactions(userId, recentDays) {
+  return await Transaction.find({ user: userId, date: { $gte: recentDays } });
+}
+
+// Create a new transaction (data must include user)
 export async function createTransaction(data) {
-  const transaction = new Transaction(data);
-  return await transaction.save();
+  return await Transaction.create(data);
 }
 
-// Get a transaction by ID
-export async function getTransactionById(id) {
-  return await Transaction.findById(id);
-};
+// Get a transaction by ID for a user
+export async function getTransactionById(userId, id) {
+  return await Transaction.findOne({ _id: id, user: userId });
+}
 
-// Update a transaction by ID
-export async function updateTransaction(id, data) {
-  return await Transaction.findByIdAndUpdate(id, data, {
+// Update a transaction by ID for a user
+export async function updateTransaction(userId, id, data) {
+  return await Transaction.findOneAndUpdate({ _id: id, user: userId }, data, {
     new: true,
     runValidators: true,
     context: "query",
   });
-};
+}
 
-// Delete a transaction by ID
-export async function deleteTransaction(id) {
-  return await Transaction.findByIdAndDelete(id);
-};
+// Delete a transaction by ID for a user
+export async function deleteTransaction(userId, id) {
+  return await Transaction.findOneAndDelete({ _id: id, user: userId });
+}
 
 

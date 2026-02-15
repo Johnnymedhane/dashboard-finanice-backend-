@@ -87,7 +87,15 @@ function validateTransactionPayload(payload, { requireTypeAndAmount }) {
 // Get all transactions
 export async function getTransactionsController(req, res) {
   try {
-    const transactions = await transactionService.fetchTransactions();
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const transactions = await transactionService.fetchTransactions(userId);
+    if (transactions.length === 0) {
+      return res.status(200).json({ message: "No transactions yet. Start by creating a new transaction.", transactions: [] });
+    }
     res.status(200).json(transactions);
   } catch (error) {
     console.error("Error fetching transactions:", error);
@@ -98,7 +106,15 @@ export async function getTransactionsController(req, res) {
 // Get recent transactions (last 7 days)
 export async function getRecentTransactionsController(req, res) {
   try {
-    const transactions = await transactionService.fetchRecentTransactions();
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const transactions = await transactionService.fetchRecentTransactions(userId);
+    if (transactions.length === 0) {
+      return res.status(200).json({ message: "No transactions in the last 7 days.", transactions: [] });
+    }
     res.status(200).json(transactions);
   } catch (error) {
     console.error("Error fetching recent transactions:", error);
@@ -109,7 +125,13 @@ export async function getRecentTransactionsController(req, res) {
 // Get a transaction by ID
 export async function getTransactionByIdController(req, res) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const transaction = await transactionService.fetchTransactionById(
+      userId,
       req.params.id,
     );
     if (!transaction) {
@@ -130,11 +152,20 @@ export async function getTransactionByIdController(req, res) {
 // Create a new transaction
 export async function createTransactionController(req, res) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const validationError = validateTransactionPayload(req.body, {
       requireTypeAndAmount: true,
     });
     if (validationError) {
       return res.status(400).json(validationError);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(req.body, "user")) {
+      delete req.body.user;
     }
 
     if (typeof req.body.description === "string") {
@@ -144,7 +175,7 @@ export async function createTransactionController(req, res) {
       req.body.category = req.body.category.trim();
     }
 
-    const transaction = await transactionService.createTransaction(req.body);
+    const transaction = await transactionService.createTransaction(userId, req.body);
     res.status(201).json(transaction);
   } catch (error) {
     if (error?.name === "ValidationError") {
@@ -163,11 +194,20 @@ export async function createTransactionController(req, res) {
 // Update a transaction by ID
 export async function updateTransactionController(req, res) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const validationError = validateTransactionPayload(req.body, {
       requireTypeAndAmount: false,
     });
     if (validationError) {
       return res.status(400).json(validationError);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(req.body, "user")) {
+      delete req.body.user;
     }
 
     if (typeof req.body.description === "string") {
@@ -178,6 +218,7 @@ export async function updateTransactionController(req, res) {
     }
 
     const transaction = await transactionService.updateTransaction(
+      userId,
       req.params.id,
       req.body,
     );
@@ -207,7 +248,13 @@ export async function updateTransactionController(req, res) {
 // Delete a transaction by ID
 export async function deleteTransactionController(req, res) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const transaction = await transactionService.deleteTransaction(
+      userId,
       req.params.id,
     );
     if (!transaction) {
