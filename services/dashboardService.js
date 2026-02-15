@@ -2,7 +2,7 @@
 import * as dashboardRepository from "../repositories/dashboardRepository.js";
 import { subDays } from "date-fns";
 // Get dashboard data with optional time filter (weekly, monthly, yearly)
-export async function getDashboardData(filter) {
+export async function getDashboardData(filter, userId) {
   let startDate;
 
   if (filter === "weekly") {
@@ -14,7 +14,8 @@ export async function getDashboardData(filter) {
   }
 
   const total = await dashboardRepository.getDashboardData(
-    startDate ? { start: startDate } : undefined
+    startDate,
+    userId,
   );
 
 

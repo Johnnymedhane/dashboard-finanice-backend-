@@ -5,12 +5,15 @@ import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import swaggerUi from 'swagger-ui-express';
+import cookieParser from 'cookie-parser';
 
 import transactionRouter from "./routes/transactionRoutes.js";
 import dashboardRouter from "./routes/dashboardRoutes.js";
 import tasksRouter from "./routes/tasksRoutes.js";
-import swaggerUi from 'swagger-ui-express';
-
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRouters.js";
+import { authMiddleware } from './midleware/authMiddleware.js';
 import { openapiSpec } from './docs/swaggers.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,16 +28,19 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 
 
 
 
 // Routes
-app.use('/api/transactions', transactionRouter);
-app.use('/api/dashboard', dashboardRouter);
-app.use('/api/tasks', tasksRouter);
-
+app.use('/api/dashboard', authMiddleware, dashboardRouter);
+app.use('/api/transactions', authMiddleware,
+  transactionRouter);
+app.use('/api/tasks', authMiddleware, tasksRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', authMiddleware, userRouter);
 // Swagger docs
 app.get('/api-docs.json', (req, res) => {
   res.json(openapiSpec);
