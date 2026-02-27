@@ -1,6 +1,13 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
 const PORT = process.env.PORT || 5000;
+const RENDER_URL =
+  process.env.SWAGGER_SERVER_URL ||
+  process.env.RENDER_EXTERNAL_URL ||
+  "https://dashboard-finanice-track.onrender.com";
+const LOCAL_URL = `http://localhost:${PORT}`;
+const PRIMARY_URL = process.env.NODE_ENV === "production" ? RENDER_URL : LOCAL_URL;
+const SECONDARY_URL = process.env.NODE_ENV === "production" ? LOCAL_URL : RENDER_URL;
 
 const options = {
   definition: {
@@ -12,7 +19,10 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url: PRIMARY_URL,
+      },
+      {
+        url: SECONDARY_URL,
       },
     ],
     tags: [
