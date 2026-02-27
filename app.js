@@ -6,8 +6,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./docs/swagger.js";
+
 import transactionRouter from "./routes/transactionRoutes.js";
 import dashboardRouter from "./routes/dashboardRoutes.js";
+import tasksRouter from "./routes/tasksRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,18 +26,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Swagger
+app.get("/api-docs.json", (req, res) => {
+  res.status(200).json(swaggerSpec);
+});
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+
 
 
 
 
 // Routes
-app.use('/api/transactions', transactionRouter);
-app.use('/api/dashboard', dashboardRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
+app.use('/api/v1/transactions', transactionRouter);
+app.use('/api/v1/tasks', tasksRouter);
 
 // root
-app.use('/', async (req, res) => {
+app.get(['/', '/api'], async (req, res) => {
   try {
-   
     const indexPath = path.join(__dirname, 'public', 'index.html');
     const indexContent = await fs.readFile(indexPath, 'utf-8');
     const updatedContent = indexContent.replace("% add %", "Api is running successfully!");
@@ -43,5 +53,15 @@ app.use('/', async (req, res) => {
   }
 });
 
+// 404 handler - serve HTML page for non-API routes
+app.use(async (req, res) => {
+  try {
+    const notFoundPath = path.join(__dirname, 'public', 'pageNotFound.html');
+    const notFoundContent = await fs.readFile(notFoundPath, 'utf-8');
+    res.status(404).send(notFoundContent);
+  } catch (err) {
+    res.status(500).json({ message: 'Error loading pageNotFound.html', error: err.message });
+  }
+});
 
 export default app;
