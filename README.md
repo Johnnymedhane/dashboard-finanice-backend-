@@ -13,9 +13,9 @@ Node.js + Express + MongoDB backend for a simple finance dashboard (transactions
 
 ## Live server (Render)
 
-- Base URL: https://dashboard-finance-track.onrender.com
-- Swagger UI: https://dashboard-finance-track.onrender.com/api-docs
-- Raw spec: https://dashboard-finance-track.onrender.com/api-docs.json
+- Base URL: https://dashboard-finanice-track.onrender.com
+- Swagger UI: https://dashboard-finanice-track.onrender.com/api-docs
+- Raw spec: https://dashboard-finanice-track.onrender.com/api-docs.json
 
 
 ## API routes
