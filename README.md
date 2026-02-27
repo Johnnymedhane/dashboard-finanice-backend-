@@ -1,6 +1,6 @@
 # Dashboard Finance Backend
 
-Node.js + Express + MongoDB backend for a simple finance dashboard (transactions, tasks, dashboard summary) with Swagger docs , Joi validation and JWT for usre auth
+Node.js + Express + MongoDB backend for a simple finance dashboard (transactions, tasks, dashboard summary) with Swagger docs , Joi validation and JWT for user auth
 
 ## Tech
 
@@ -13,9 +13,9 @@ Node.js + Express + MongoDB backend for a simple finance dashboard (transactions
 
 ## Live server (Render)
 
-- Base URL: https://dashboard-finanice-track.onrender.com
-- Swagger UI: https://dashboard-finanice-track.onrender.com/api-docs
-- Raw spec: https://dashboard-finanice-track.onrender.com/api-docs.json
+- Base URL: https://dashboard-finance-track.onrender.com
+- Swagger UI: https://dashboard-finance-track.onrender.com/api-docs
+- Raw spec: https://dashboard-finance-track.onrender.com/api-docs.json
 
 
 ## API routes
