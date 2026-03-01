@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -25,6 +26,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Swagger
 app.get("/api-docs.json", (req, res) => {

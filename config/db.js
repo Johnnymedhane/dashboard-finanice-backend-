@@ -3,11 +3,14 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
-const MONGO_URI = process.env.MONGO_URI;
+const MAIN_DB = process.env.MONGO_URI;
+
+
 let db
+
 export  async function connectDB() {
   try {
-     await mongoose.connect(MONGO_URI);
+     await mongoose.connect(MAIN_DB);
       db = mongoose.connection.db;
     console.log("MongoDB connected", db.databaseName);
     return db;
@@ -28,8 +31,12 @@ export function getDB() {
 export async function disconnectDB() {
   try {
     await mongoose.disconnect();
-    console.log("MongoDB disconnected");
+    console.log("All MongoDB connections closed");
   } catch (error) {
     console.error("Error disconnecting MongoDB:", error);
   }
 }
+
+
+   
+

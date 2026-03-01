@@ -5,19 +5,26 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function authenticateToken(req, res, next) {
- let token = req.cookies?.token || req.headers["authorization"]?.split(" ")[1];
+  try {
+    const tokenHeader = req.headers["authorization"]?.split(" ")[1];
 
- if (!token) {
-   return res.status(401).json({ message: "Access token is missing" });
- }
+    const tokenCookie = req.cookies?.token;
 
- const decoded = jwt.verify(token, JWT_SECRET);
+    const token = tokenHeader || tokenCookie;
+    //  let token = req.cookies?.token || req.headers["authorization"]?.split(" ")[1];
 
- const user = await Customer.findOne({ uuid: decoded.uuid });
- if (!user) {
-   return res.status(404).json({ message: "User not found" });
- }
- req.user = { id: user._id }; // Attach user ID to request object for downstream use
- next();
- 
+    if (!token) {
+      return res.status(401).json({ message: "Access token is missing" });
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (!decoded || !decoded.userId) {
+      return res.status(401).json({ message: "Invalid access token" });
+    }
+
+    req.user = { id: decoded.userId }; // Attach user ID to request object for downstream use
+    next();
+  } catch (error) {
+    console.error("Error authenticating token:", error);
+    return res.status(401).json({ message: "Invalid access token" });
+  }
 }
